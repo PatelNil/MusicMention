@@ -1,0 +1,9 @@
+body {
+    background-color:white;
+}
+.navbar{
+    border-radius: 0px;
+}
+.navbar-brand{
+    font-family: "Satisfy", cursive;
+}

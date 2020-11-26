@@ -1,0 +1,35 @@
+{% extends 'music/base.html' %}
+{% block title %}Songs{% endblock %}
+{% block icon %}
+<a href="{% url 'music:add_song' %}">
+<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Song
+</a>
+{% endblock %}
+{% block body %}
+<img src="{{ album.album_logo.url }}" alt="Logo" />
+<h1>{{album}}</h1>
+<h2>{{album.artist}}</h2>
+{% for song in album.song_set.all %}
+<br>
+<h4 style="display: inline;">{{ song.song_title }}</h4>
+<a href="{% url 'music:song_delete' song.id %}" class="btn btn-primary btn-sm" role="button" style="display: inline;">
+    <span class="glyphicon glyphicon-trash" style="display: inline;"></span>
+</a>
+<br>
+{% endfor %}
+{% endblock %}
+<!--
+<form action="{% url 'music:fav' album.id %}" method="POST">
+{% csrf_token %}
+{% for song in album.song_set.all %}
+<input type='radio' id="song{{ forloop.counter }}" name='song' value="{{song.id}}">
+<label for="song{{ forloop.counter }}">{{ song.song_title }}
+{% if song.is_fav %}
+<img src="http://i.imgur.com/b9b13Rd.png" />
+{% endif %}
+</label><br>
+{% endfor %}
+<input type='submit'>
+</form>
+-->
+
