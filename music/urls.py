@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'album/(?P<pk>[0-9]+)/$',views.Album_update.as_view(),name='album_update'),
     url(r'album/(?P<pk>[0-9]+)/delete/$',views.Album_delete.as_view(),name='album_delete'),
     url(r'album/(?P<pk>[0-9]+)/delete_song',views.Song_delete.as_view(),name='song_delete'),
+    url(r'/lyrics/$',views.Show_lyrics,name='lyrics'),
+    url(r'^music/make_album_fav',views.make_album_fav,name='album_fav'),
     #url(r'^(?P<album_id>[0-9]+)/fav/$',views.fav,name='fav'),
 ]
 

@@ -1,4 +1,5 @@
 from django.http import request,Http404
+from django.http.response import JsonResponse
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from django.template import context
@@ -12,6 +13,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,authenticate,logout
 from django.views.generic import View
 from .forms import UserForm
+import lyricsgenius as lg
 class IndexView(generic.ListView):
     template_name='music/index.html'
     context_object_name = 'all_album'
@@ -66,6 +68,22 @@ class Song_add(CreateView):
 class Song_delete(DeleteView):
     model = Song
     success_url = reverse_lazy('music:details')
+def make_album_fav(request):
+    id = request.GET['id']
+    a1 = Album.objects.get(id=id)
+    a1.is_favorite = True
+    a1.save()
+    return JsonResponse({'fav':'Favorite'})
+
+def Show_lyrics(request):
+    genius = lg.Genius('4x-nTc-nUzekdFO6SyL2U_IJ93xxvTtztp_ox4hfqOBoEnZolVv6jEDMvj_F0M_B',skip_non_songs=True, excluded_terms=["(Remix)", "(Live)"], remove_section_headers=True)
+    artist = genius.search_artist(request.POST['artist'], max_songs=0, sort="title")
+    song = genius.search_song(request.POST['id'])
+    s1 = song.lyrics
+    s1 = list(s1.split('\n'))
+    return render(request,'music/lyrics.html',{'context':s1})
+
+
 # Create your views here.
 """
 def index(request):

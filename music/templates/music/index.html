@@ -1,31 +1,57 @@
-{% extends 'music/base.html' %}
-{% block title %}Album{% endblock %}
-{% block body %}
+{% extends 'music/base.html' %} {% block title %}Album{% endblock %} 
+{% block body %} 
 {% if all_album %}
 <div class="row">
-    {% for album in all_album %}
-    <div class="col-md-3">
-        <div class="border border-primary">
-            <div class="card mb-4 shadow-sm">
-                <img src="{{ album.album_logo.url }}" alt="Logo" />
-            </div>
-            <div class="card-body">
-                <h3 class="card-text">{{album.album_title}}</h3>
-                <div class="d-flex justify-center-between align-items-center">
-                    
-                        <a href="{% url 'music:details' album.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
-                        <!--Delete-->
-                        <a href="{% url 'music:album_delete' album.id %}" class="btn btn-primary btn-sm" role="button">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
-                        
-                </div>
-            </div>
+  {% for album in all_album %}
+  <div class="col-md-3">
+    <div class="border border-primary">
+      <div class="card mb-4 shadow-sm">
+        <img src="{{ album.album_logo.url }}" alt="Logo" />
+      </div>
+      <div class="card-body">
+        <h3 class="card-text">{{album.album_title}}</h3>
+        <div class="d-flex justify-center-between align-items-center">
+          <a
+            href="{% url 'music:details' album.id %}"
+            class="btn btn-primary btn-sm"
+            role="button"
+            >View Details</a
+          >
+          {% if album.is_favorite %}
+          <span class="glyphicon glyphicon-heart" id='like{{ forloop.counter }}'></span>
+          {% else %}
+          <span class="glyphicon glyphicon-heart-empty" id='like{{ forloop.counter }}'></span>
+          {% endif %}
+          <!--Delete-->
+          
+          <script>
+              $("#like{{forloop.counter}}").click(function(e){
+                  e.preventDefault();
+                  var xhr = new XMLHttpRequest();
+                  var id = "{{ album.id }}";
+                  xhr.open('GET','music/make_album_fav?id='+id,true);
+                  xhr.onload = function() {
+                      var lable = JSON.parse(xhr.responseText);
+                      document.getElementById('like{{forloop.counter}}').classList.remove("glyphicon-heart-empty");
+                      document.getElementById('like{{forloop.counter}}').classList.add("glyphicon-heart");
+                  }
+                  xhr.send();
+                })
+          </script>
+          <a
+            href="{% url 'music:album_delete' album.id %}"
+            class="btn btn-primary btn-sm"
+            role="button"
+          >
+            <span class="glyphicon glyphicon-trash"></span>
+          </a>
         </div>
+      </div>
     </div>
-{% endfor %}
+  </div>
+  {% endfor %}
 </div>
 {% else %}
-<h3> You have no Album</h3>
-{% endif %}
+<h3>You have no Album</h3>
+{% endif %} 
 {% endblock %}

@@ -15,6 +15,16 @@
 <a href="{% url 'music:song_delete' song.id %}" class="btn btn-primary btn-sm" role="button" style="display: inline;">
     <span class="glyphicon glyphicon-trash" style="display: inline;"></span>
 </a>
+    <form action="{% url 'music:lyrics'%}" method="POST" >
+    {% csrf_token %}
+    <input type='hidden' name='id' value="{{ song.song_title }}" />
+    <input type='hidden' name='album_id' value="{{ album.id }}" />
+    <input type='hidden' name='artist' value="{{ album.artist }}" />
+    <button type="submit">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin:5px"></span>Lyrics
+</button>
+</form>
+    
 <br>
 {% endfor %}
 {% endblock %}
